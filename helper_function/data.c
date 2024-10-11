@@ -216,7 +216,7 @@ char calculateGrade(float total) {
 }
 
 Student* readFile() {
-    const char *filename = "students.txt"; // Hardcoded filename
+    const char *filename = "students.txt";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Error opening file");
@@ -505,7 +505,8 @@ void updateGradeMappings() {
     printf("\n");
 }
 
-void removeStudent(Student *students) {
+void removeStudent(Student **studentsPtr) {
+    Student *students = *studentsPtr;  // Dereference to get original pointer
     int studentID;
     int found = 0;  // Track if the student is found
     size_t numStudents = 0;
@@ -539,11 +540,12 @@ void removeStudent(Student *students) {
 
                 // Resize the array (shrink it by one student)
                 numStudents -= 1;
-                students = realloc(students, (numStudents + 1) * sizeof(Student)); // +1 for the last empty entry
-                if (students == NULL && numStudents > 0) {
+                Student *newStudents = realloc(students, (numStudents + 1) * sizeof(Student));
+                if (newStudents == NULL && numStudents > 0) {
                     perror("Error reallocating memory for students array");
-                    exit(1);  // Exit on memory reallocation failure
+                    exit(1);
                 }
+                *studentsPtr = newStudents; // Update the original pointer
 
                 printf("Student successfully deleted.\n\n");
 

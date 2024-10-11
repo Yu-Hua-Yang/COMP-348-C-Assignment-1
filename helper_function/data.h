@@ -9,7 +9,7 @@ void displayGradeDistribution(Student *students);
 void updateGradeMappings();
 void updateLastName(Student *students);
 void updateExamGrade(Student *students);
-void removeStudent(Student *students);
+void removeStudent(Student **studentsPtr);
 float calculateTotal(Student student);
 char calculateGrade(float total);
 int selectSortColumn();
