@@ -57,23 +57,23 @@ int validateSelection() {
             return 0;
         }
         case 4:
-            // Code for case 4 (return a valid int value)
-            return 1;
-
+            updateLastName(students);
+            waitForContinue();
+            return 0;
         case 5:
-            // Code for case 5 (return a valid int value)
-            return 1;
-
+            updateExamGrade(students);
+            waitForContinue();
+            return 0;
         case 6:
-            // Code for case 6 (return a valid int value)
-            return 1;
-
+            updateGradeMappings();
+            waitForContinue();
+            return 0;
         case 7:
-            // Code for case 7 (return a valid int value)
-            return 1;
-
+            removeStudent(students);
+            waitForContinue();
+            return 0;
         case 8:
-            printf("You selected: %d\n", selectionNumber);
+            printf("Goodbye and thanks for using our spreadsheet app");
             return 1;
 
         default:
