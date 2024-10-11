@@ -14,34 +14,86 @@ int gradeC = 60;
 int gradeD = 50;
 int gradeF = 0;
 
-// Comparison functions
+/**
+ * Compares two students by their student ID.
+ *
+ * This comparison is used for sorting a list of students.
+ *
+ * @param a Pointer to the first student.
+ * @param b Pointer to the second student.
+ *
+ * @return A negative value if studentA's ID is less than studentB's ID,
+ *         zero if studentA's ID is equal to studentB's ID, and a positive
+ *         value if studentA's ID is greater than studentB's ID.
+ */
 int compareByID(const void *a, const void *b) {
     Student *studentA = (Student *)a;
     Student *studentB = (Student *)b;
     return (studentA->id - studentB->id);
 }
 
+/**
+ * Compares two students by their last name.
+ *
+ * The comparison is case-sensitive and uses the strcmp function.
+ *
+ * @param a a pointer to the first student
+ * @param b a pointer to the second student
+ * @return a negative value if studentA's last name is less than studentB's last name,
+ *         a positive value if studentA's last name is greater than studentB's last name,
+ *         and 0 if the last names are equal.
+ */
 int compareByLastName(const void *a, const void *b) {
     Student *studentA = (Student *)a;
     Student *studentB = (Student *)b;
     return strcmp(studentA->lastName, studentB->lastName);
 }
 
+/**
+ * Compares two students by their final exam grade.
+ *
+ * The comparison is done in descending order.
+ *
+ * @param a a pointer to the first student
+ * @param b a pointer to the second student
+ * @return a negative value if studentA's exam grade is less than studentB's exam grade,
+ *         a positive value if studentA's exam grade is greater than studentB's exam grade,
+ *         and 0 if the exam grades are equal.
+ */
 int compareByExamGrade(const void *a, const void *b) {
     int examGradeA = ((Student *)a)->final;
     int examGradeB = ((Student *)b)->final;
 
-    // Sort by exam grade in descending order
     return examGradeB - examGradeA;
 }
 
+/**
+ * Compares two students by their total course grade.
+ *
+ * The comparison is done in descending order.
+ *
+ * @param a a pointer to the first student
+ * @param b a pointer to the second student
+ * @return a negative value if studentA's total grade is less than studentB's total grade,
+ *         a positive value if studentA's total grade is greater than studentB's total grade,
+ *         and 0 if the total grades are equal.
+ */
 int compareByTotal(const void *a, const void *b) {
     float totalA = calculateTotal(*(Student *)a);
     float totalB = calculateTotal(*(Student *)b);
-    return (totalB > totalA) - (totalB < totalA); // Descending order
+    return (totalB > totalA) - (totalB < totalA);
 }
 
-// Function to select the sort column
+
+/**
+ * Asks the user to choose a column to sort the spreadsheet by.
+ *
+ * The user is presented with a menu and asked to enter the number of their
+ * chosen column. The function loops until the user enters a valid column
+ * number (1-4). The chosen column is stored in the global variable sortColumn.
+ *
+ * @return 1 when the user chose a valid choice if not loops until valid input
+ */
 int selectSortColumn() {
     int sortChosen = 0;
     int choice;
@@ -68,7 +120,24 @@ int selectSortColumn() {
     return sortChosen;
 }
 
-// Modified DisplaySpreadSheet function
+/**
+ * Displays the spreadsheet of students and their grades.
+ *
+ * This function takes a pointer to the start of an array of Student structs as
+ * input and displays the spreadsheet in the console. The spreadsheet is sorted
+ * according to the global variable sortColumn.
+ *
+ * The spreadsheet is displayed in the following format:
+ *
+ * ID    Last        First       A1   A2   A3   Midterm   Exam   Total   Grade
+ * ----  ----------  ----------  ---- ---- ---- -------- ------- ------  -----
+ * <id>  <lastName>  <firstName> <A1> <A2> <A3> <midterm> <exam> <total> <grade>
+ *
+ * The grade is calculated by calling calculateGrade on the total.
+ * The total is calculated by calling calculateTotal on the student grades.
+ *
+ * @param students Pointer to the array of Student structs.
+ */
 void displaySpreadSheet(Student *students) {
     size_t numStudents = 0;
     while (students[numStudents].id != 0) {
@@ -115,6 +184,15 @@ void displaySpreadSheet(Student *students) {
     printf("\n");
 }
 
+/**
+ * Calculates the total course grade for a student.
+ *
+ * The total course grade is a weighted sum of the assignment, midterm and final grades.
+ * The weights are as follows: assignment 25%, midterm 25%, final 50%.
+ *
+ * @param student The student for whom to calculate the total course grade.
+ * @return The total course grade for the student.
+ */
 float calculateTotal(Student student) {
     float assignmentTotal = ((student.asst1 + student.asst2 + student.asst3) / 120.0) * 25.0;
     float midtermTotal = (student.midterm / 25.0) * 25.0;
