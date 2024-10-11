@@ -1,12 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include "./helper_function/print.h"
-#include "./helper_function/spreadsheet.h"
+#include "spreadsheet.h"
+#include "menu.h"
+#include "student.h"
+
 int main() {
-  system("clear");
-  int isTerminated = 0;
-  while(!isTerminated) {
-    printMainMenu();
-    isTerminated = validateSelection();
-  }
+    Spreadsheet sheet;
+    initSpreadsheet(&sheet);
+    if (loadStudents(&sheet, "students.txt") != 0) {
+        fprintf(stderr, "Failed to load students.\n");
+        return 1;
+    }
+    while (1) {
+        displayMenu();
+        handleMenuChoice(&sheet);
+    }
+    return 0;
 }
