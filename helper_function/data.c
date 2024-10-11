@@ -236,6 +236,11 @@ Student* readFile() {
     char *line = NULL;
     size_t bufferSize = 0;
     while (getline(&line, &bufferSize, file) != -1) {
+        // Check if line is not empty
+        if (line[0] == '\n') {
+            continue; // Skip blank lines
+        }
+
         if (studentCount >= capacity) {
             capacity *= 2;
             students = realloc(students, capacity * sizeof(Student));
@@ -254,6 +259,7 @@ Student* readFile() {
     free(line);
     fclose(file);
 
+    // Resize the array to the actual number of students read
     students = realloc(students, studentCount * sizeof(Student));
     return students;
 }
