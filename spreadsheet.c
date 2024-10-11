@@ -3,7 +3,6 @@
 #include "spreadsheet.h"
 #include "data.h"
 #include "student.h"
-#include "print.h"
 
 void clearInputBuffer() {
     int ch;

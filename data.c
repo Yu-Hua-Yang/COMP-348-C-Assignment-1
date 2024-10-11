@@ -5,6 +5,8 @@
 #include "student.h"
 #include "spreadsheet.h"
 
+#define MAX_STUDENTS 1000
+
 int sortColumn = 1; // Default sort column (1 = Student ID)
 
 // Initial grade mappings
@@ -223,8 +225,7 @@ Student* readFile() {
         return NULL;
     }
 
-    size_t capacity = 2;
-    Student *students = malloc(capacity * sizeof(Student));
+    Student *students = malloc(MAX_STUDENTS * sizeof(Student));
     if (students == NULL) {
         perror("Error allocating memory for students array");
         fclose(file);
@@ -232,21 +233,10 @@ Student* readFile() {
     }
 
     size_t studentCount = 0;
-
     char *line = NULL;
     size_t bufferSize = 0;
-    while (getline(&line, &bufferSize, file) != -1) {
-        if (studentCount >= capacity) {
-            capacity *= 2;
-            students = realloc(students, capacity * sizeof(Student));
-            if (students == NULL) {
-                perror("Error reallocating memory for students array");
-                free(line);
-                fclose(file);
-                return NULL;
-            }
-        }
 
+    while (getline(&line, &bufferSize, file) != -1 && studentCount < MAX_STUDENTS) {
         parseLine(line, &students[studentCount]);
         studentCount++;
     }
@@ -254,7 +244,6 @@ Student* readFile() {
     free(line);
     fclose(file);
 
-    students = realloc(students, studentCount * sizeof(Student));
     return students;
 }
 
@@ -267,7 +256,7 @@ int writeToFile(Student *students) {
     }
 
     size_t i = 0;
-    while (students[i].id != 0) {
+    while (students[i].id != 0 && i < MAX_STUDENTS) {
         fprintf(file, "%d|%s|%s|%d|%d|%d|%d|%d\n",
                 students[i].id,
                 students[i].lastName,
@@ -511,7 +500,7 @@ void removeStudent(Student *students) {
     size_t numStudents = 0;
 
     // Count the number of students dynamically (assuming student ID of 0 means an empty entry)
-    while ((students)[numStudents].id != 0) {
+    while (students[numStudents].id != 0 && numStudents < MAX_STUDENTS) {
         numStudents++;
     }
 
@@ -526,24 +515,16 @@ void removeStudent(Student *students) {
 
         // Search for the student by ID
         for (size_t i = 0; i < numStudents; i++) {
-            if ((students)[i].id == studentID) {
+            if (students[i].id == studentID) {
                 found = 1;  // Student found
 
                 // Shift all the students after the found student to the left
                 for (size_t j = i; j < numStudents - 1; j++) {
-                    (students)[j] = (students)[j + 1];
+                    students[j] = students[j + 1];
                 }
 
                 // Mark the last student as removed by setting its ID to 0
-                (students)[numStudents - 1].id = 0;
-
-                // Resize the array (shrink it by one student)
-                numStudents -= 1;
-                students = realloc(students, (numStudents + 1) * sizeof(Student)); // +1 for the last empty entry
-                if (students == NULL && numStudents > 0) {
-                    perror("Error reallocating memory for students array");
-                    exit(1);  // Exit on memory reallocation failure
-                }
+                students[numStudents - 1].id = 0;
 
                 printf("Student successfully deleted.\n\n");
 
