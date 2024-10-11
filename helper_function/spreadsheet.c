@@ -35,7 +35,7 @@ int validateSelection() {
     printf("Selection: ");
     scanf("%d", &selectionNumber);
     system("clear");
-    Student* students = readFirle();
+    Student* students = readFile();
 
     switch (selectionNumber) {
         case 1:
