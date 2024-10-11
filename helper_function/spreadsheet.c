@@ -69,7 +69,7 @@ int validateSelection() {
             waitForContinue();
             return 0;
         case 7:
-            removeStudent(&students);
+            removeStudent(students);
             waitForContinue();
             return 0;
         case 8:

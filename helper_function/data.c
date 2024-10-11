@@ -505,8 +505,7 @@ void updateGradeMappings() {
     printf("\n");
 }
 
-void removeStudent(Student **studentsPtr) {
-    Student *students = *studentsPtr;  // Dereference to get original pointer
+void removeStudent(Student *students) {
     int studentID;
     int found = 0;  // Track if the student is found
     size_t numStudents = 0;
@@ -540,12 +539,11 @@ void removeStudent(Student **studentsPtr) {
 
                 // Resize the array (shrink it by one student)
                 numStudents -= 1;
-                Student *newStudents = realloc(students, (numStudents + 1) * sizeof(Student));
-                if (newStudents == NULL && numStudents > 0) {
+                students = realloc(students, (numStudents + 1) * sizeof(Student)); // +1 for the last empty entry
+                if (students == NULL && numStudents > 0) {
                     perror("Error reallocating memory for students array");
-                    exit(1);
+                    exit(1);  // Exit on memory reallocation failure
                 }
-                *studentsPtr = newStudents; // Update the original pointer
 
                 printf("Student successfully deleted.\n\n");
 
