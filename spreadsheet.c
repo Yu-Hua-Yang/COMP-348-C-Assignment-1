@@ -4,12 +4,27 @@
 #include "data.h"
 #include "student.h"
 
+
+/**
+ * Clears the input buffer by consuming all characters until a newline or EOF.
+ *
+ * This function is used to clear the input buffer after a scanf call to prevent
+ * extraneous characters from affecting future input operations.
+ */
 void clearInputBuffer() {
     int ch;
     while ((ch = getchar()) != '\n' && ch != EOF);
 }
 
-// Function to handle continuation prompt
+/**
+ * Prompts the user to enter a valid character to continue.
+ *
+ * The function loops until a valid character ('c' or 'C') is entered.
+ * If the input is invalid, the function will loop until a valid input is entered.
+ * After a valid input is received, the function clears the console and returns 0.
+ *
+ * @return 0 if the user enters a valid character ('c' or 'C'), 1 otherwise.
+ */
 int waitForContinue() {
     int isDone = 0;
     char input;
@@ -29,6 +44,15 @@ int waitForContinue() {
     return 0;  // Return once the valid input is received
 }
 
+/**
+ * Validates user input for the spreadsheet menu and performs the corresponding action.
+ *
+ * Prompts the user to enter a menu selection and validates the input to ensure it is a valid menu option (1-8).
+ * If the input is invalid, the function will loop until a valid input is entered.
+ * The function performs the corresponding action based on the user's selection.
+ *
+ * @return 1 if the user selects the exit option (8), 0 otherwise.
+ */
 int validateSelection() {
     int selectionNumber;
     printf("Selection: ");

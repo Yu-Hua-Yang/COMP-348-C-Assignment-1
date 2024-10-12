@@ -217,8 +217,21 @@ char calculateGrade(float total) {
     }
 }
 
+/**
+ * Reads the student data from a file and returns an array of Student structures.
+ *
+ * The file is expected to be in the following format:
+ *   Student ID|Last name|First name|Assignment 1|Assignment 2|Assignment 3|Midterm|Final
+ *   ...
+ *
+ * The function allocates memory for the students array and populates it with the
+ * student data from the file. If the file cannot be opened or if there is an error
+ * allocating memory, the function returns NULL.
+ *
+ * @return An array of Student structures, or NULL if there is an error.
+ */
 Student* readFile() {
-    const char *filename = "students.txt"; // Hardcoded filename
+    const char *filename = "students.txt";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Error opening file");
@@ -247,12 +260,27 @@ Student* readFile() {
     return students;
 }
 
+/**
+ * Writes the given array of Student structures to a file.
+ *
+ * The function opens the file named by the global constant filename in
+ * overwrite mode and writes each student's data to the file in the following
+ * format:
+ *   Student ID|Last name|First name|Assignment 1|Assignment 2|Assignment 3|Midterm|Final
+ *   ...
+ *
+ * If the file cannot be opened, the function prints an error message and
+ * returns -1. If the write is successful, the function returns 0.
+ *
+ * @param students An array of Student structures.
+ * @return 0 if the write is successful, -1 if there is an error.
+ */
 int writeToFile(Student *students) {
-    const char *filename = "students.txt"; // Hardcoded filename
-    FILE *file = fopen(filename, "w"); // Open for writing (overwrite mode)
+    const char *filename = "students.txt";
+    FILE *file = fopen(filename, "w");
     if (file == NULL) {
         perror("Error opening file for writing");
-        return -1; // Indicate failure
+        return -1;
     }
 
     size_t i = 0;
@@ -270,10 +298,22 @@ int writeToFile(Student *students) {
     }
 
     fclose(file);
-    return 0; // Indicate success
+    return 0;
 }
 
 
+/**
+ * Parses a line of text into a Student structure.
+ *
+ * The line is expected to be in the following format:
+ *   Student ID|Last name|First name|Assignment 1|Assignment 2|Assignment 3|Midterm|Final
+ *
+ * This function uses sscanf to parse the line into the fields of the Student
+ * structure.
+ *
+ * @param line The line to parse.
+ * @param student The Student structure to populate with the parsed data.
+ */
 void parseLine(char *line, Student *student) {
     sscanf(line, "%d|%[^|]|%[^|]|%d|%d|%d|%d|%d",
            &student->id,
@@ -286,7 +326,11 @@ void parseLine(char *line, Student *student) {
            &student->final);
 }
 
-// Function to display the grade distribution (Option 2)
+/**
+ * Prints a line of asterisks to the console.
+ *
+ * @param count The number of asterisks to print.
+ */
 void printAsterisks(int count) {
     for (int i = 0; i < count; i++) {
         printf("*");
@@ -294,6 +338,15 @@ void printAsterisks(int count) {
     printf("\n");
 }
 
+/**
+ * Displays the grade distribution of the students.
+ *
+ * This function takes a pointer to an array of Student structs as input and
+ * displays the grade distribution in the console. The grade distribution is
+ * displayed as a bar chart with asterisks, one for each letter grade.
+ *
+ * @param students Pointer to the array of Student structs.
+ */
 void displayGradeDistribution(Student *students) {
     int countA = 0, countB = 0, countC = 0, countD = 0, countF = 0;
 
@@ -343,6 +396,20 @@ void displayGradeDistribution(Student *students) {
     printf("\n");
 }
 
+/**
+ * Updates a student's last name.
+ *
+ * This function takes a pointer to an array of Student structs as input and
+ * prompts the user to enter a valid student ID. If the student ID is found, the
+ * function prompts the user to enter a new last name and updates the student's
+ * last name in the array. The function saves the changes to the file and
+ * displays a confirmation message.
+ *
+ * If the student ID is not found, the function prompts the user to enter a
+ * valid student ID again.
+ *
+ * @param students Pointer to the array of Student structs.
+ */
 void updateLastName(Student *students) {  
     int studentID;
     int found = 0; // Variable to track if the student is found
@@ -384,11 +451,25 @@ void updateLastName(Student *students) {
       if (!found) {
         clearInputBuffer();
         system("clear");
-        printf("Student ID %d not found. Please try again.\n\n", studentID);  // Fix: Pass studentID here
+        printf("Student ID %d not found. Please try again.\n\n", studentID);
       }
   }
 }
 
+/**
+ * Updates a student's exam grade.
+ *
+ * This function takes a pointer to an array of Student structs as input and
+ * prompts the user to enter a valid student ID. If the student ID is found, the
+ * function prompts the user to enter a new exam grade and updates the student's
+ * exam grade in the array. The function saves the changes to the file and
+ * displays a confirmation message.
+ *
+ * If the student ID is not found, the function prompts the user to enter a
+ * valid student ID again.
+ *
+ * @param students Pointer to the array of Student structs.
+ */
 void updateExamGrade(Student *students) {  
     int studentID;
     int found = 0; // Variable to track if the student is found
@@ -448,6 +529,15 @@ void updateExamGrade(Student *students) {
     }
 }
 
+/**
+ * Prompts the user to enter a new grade baseline for a given grade name and
+ * validates the input to ensure it is within the range of 0 to 100.
+ *
+ * The function will loop until a valid input is entered.
+ *
+ * @param gradeName The name of the grade to be updated (A, B, C, D, F).
+ * @return The new grade baseline.
+ */
 int getValidatedGrade(const char* gradeName) {
     int isValid = 0;
     int newGrade;
@@ -468,6 +558,14 @@ int getValidatedGrade(const char* gradeName) {
     return newGrade;
 }
 
+/**
+ * Updates the grade mappings for the assignment.
+ *
+ * This function prompts the user to enter a new grade mapping for each grade
+ * (A, B, C, D, F) and stores the new mappings in the global variables gradeA,
+ * gradeB, gradeC, gradeD, and gradeF. The function also displays the current
+ * and new mappings.
+ */
 void updateGradeMappings() {
     // Display current mappings
     printf("Current Mapping:\n");
@@ -494,12 +592,27 @@ void updateGradeMappings() {
     printf("\n");
 }
 
+/**
+ * Removes a student from the spreadsheet.
+ *
+ * This function takes a pointer to an array of Student structs as input and
+ * prompts the user to enter a valid student ID. If the student ID is found, the
+ * function removes the student from the array, shifts all the students after the
+ * removed student to the left, and marks the last student as removed by setting
+ * its ID to 0. The function saves the updated student list to the file and
+ * displays a confirmation message.
+ *
+ * If the student ID is not found, the function prompts the user to enter a valid
+ * student ID again.
+ *
+ * @param students Pointer to the array of Student structs.
+ */
 void removeStudent(Student *students) {
     int studentID;
     int found = 0;  // Track if the student is found
     size_t numStudents = 0;
 
-    // Count the number of students dynamically (assuming student ID of 0 means an empty entry)
+    // Count the number of students
     while (students[numStudents].id != 0 && numStudents < MAX_STUDENTS) {
         numStudents++;
     }
