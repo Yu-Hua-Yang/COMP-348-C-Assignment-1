@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include "spreadsheet.h"
 
+/*
+ * To compile use
+ * gcc -o main main.c spreadsheet.c data.c
+ *
+ * To run use 
+ * ./main
+*/
+
 void printMainMenu();
 
 int main() {
