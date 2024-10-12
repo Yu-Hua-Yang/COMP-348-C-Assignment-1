@@ -96,7 +96,8 @@ int validateSelection() {
             waitForContinue();
             return 0;
         case 8:
-            printf("Goodbye and thanks for using our spreadsheet app");
+            printf("Goodbye and thanks for using our spreadsheet app\n"
+                    "\n");
             return 1;
 
         default:
